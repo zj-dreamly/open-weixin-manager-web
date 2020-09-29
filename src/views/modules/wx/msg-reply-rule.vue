@@ -15,13 +15,13 @@
                 <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
                         <el-form-item label="作用范围">
-                            <span>{{ props.row.appid?'当前公众号':'全部公众号' }}</span>
+                            <span>{{ props.row.appid ? '当前公众号' : '全部公众号' }}</span>
                         </el-form-item>
                         <el-form-item label="精确匹配">
-                            <span>{{ props.row.exactMatch?'是':'否' }}</span>
+                            <span>{{ props.row.exactMatch ? '是' : '否' }}</span>
                         </el-form-item>
                         <el-form-item label="是否有效">
-                            <span>{{ props.row.status?'是':'否' }}</span>
+                            <span>{{ props.row.status ? '是' : '否' }}</span>
                         </el-form-item>
                         <el-form-item label="备注说明">
                             <span>{{ props.row.desc }}</span>
@@ -61,7 +61,8 @@
 
 <script>
 import AddOrUpdate from './msg-reply-rule-add-or-update'
-import { mapState } from 'vuex'
+import {mapState} from 'vuex'
+
 export default {
     components: {
         AddOrUpdate
@@ -81,7 +82,7 @@ export default {
         }
     },
     computed: mapState({
-        KefuMsgType: state=>state.message.KefuMsgType
+        KefuMsgType: state => state.message.KefuMsgType
     }),
 
     activated() {
@@ -92,14 +93,14 @@ export default {
         getDataList() {
             this.dataListLoading = true
             this.$http({
-                url: this.$http.adornUrl('/manage/msgReplyRule/list'),
+                url: this.$http.adornUrl('/manage/msgReplyRule/list?appid=' + Vue.cookie.get("appid")),
                 method: 'get',
                 params: this.$http.adornParams({
                     'page': this.pageIndex,
                     'limit': this.pageSize,
                     'matchValue': this.dataForm.matchValue
                 })
-            }).then(({ data }) => {
+            }).then(({data}) => {
                 if (data && data.code === 200) {
                     this.dataList = data.page.list
                     this.totalCount = data.page.totalCount
@@ -144,7 +145,7 @@ export default {
                     url: this.$http.adornUrl('/manage/msgReplyRule/delete'),
                     method: 'post',
                     data: this.$http.adornData(ids, false)
-                }).then(({ data }) => {
+                }).then(({data}) => {
                     if (data && data.code === 200) {
                         this.$message({
                             message: '操作成功',
