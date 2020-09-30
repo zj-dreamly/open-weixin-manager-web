@@ -7,7 +7,9 @@
     <el-form-item label="公众号名称" prop="name">
       <el-input v-model="dataForm.name" placeholder="公众号名称"></el-input>
     </el-form-item>
-    <div class="padding text-gray">测试号可选择服务号，不同类型账号、是否认证可使用功能权限不同，<a href="https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Explanation_of_interface_privileges.html">参考文档</a></div>
+    <div class="padding text-gray">测试号可选择服务号，不同类型账号、是否认证可使用功能权限不同，
+        <a href="https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Explanation_of_interface_privileges.html">参考文档</a>
+    </div>
     <el-row>
         <el-col :span="12">
             <el-form-item label="公众号类型" prop="type">
@@ -22,7 +24,7 @@
             </el-form-item>
         </el-col>
     </el-row>
-    
+
     <el-form-item label="appid" prop="appid">
       <el-input v-model="dataForm.appid" placeholder="appid"></el-input>
     </el-form-item>
@@ -49,7 +51,7 @@ import { mapState } from 'vuex'
     data () {
       return {
         visible: false,
-        dataForm: {  
+        dataForm: {
           appid: '',
           name: '',
           type:'2',
@@ -85,7 +87,7 @@ import { mapState } from 'vuex'
                 this.$refs['dataForm'].resetFields()
             })
         }
-        
+
       },
       // 表单提交
       dataFormSubmit () {

@@ -6,7 +6,8 @@
             </el-form-item>
             <el-form-item>
                 <el-button @click="getDataList()">查询</el-button>
-                <el-button v-if="isAuth('wx:wxaccount:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+                <el-button v-if="isAuth('wx:wxaccount:save')" type="primary" @click="addOrUpdateHandle()">手动添加公众号</el-button>
+                <el-button v-if="isAuth('wx:wxaccount:save')" type="primary" @click="addOrUpdateHandleByOpen()">授权添加公众号</el-button>
                 <el-button v-if="isAuth('wx:wxaccount:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             </el-form-item>
         </el-form>
@@ -92,6 +93,9 @@ export default {
             this.$nextTick(() => {
                 this.$refs.addOrUpdate.init(item)
             })
+        },
+        addOrUpdateHandleByOpen(item){
+            window.location.href="http://z5os29qr.xiaomy.net/authorize/show";
         },
         accessInfo(item){
             this.accountAccessVisible = true
