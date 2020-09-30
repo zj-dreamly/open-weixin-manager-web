@@ -61,7 +61,7 @@ export default {
     methods: {
         getWxMenu() {
             this.$http({
-                url: this.$http.adornUrl('/manage/wxMenu/getMenu?appid=' + Vue.cookie.get('appid'))
+                url: this.$http.adornUrl('/manage/wxMenu/getMenu')
             }).then(({data}) => {
                 if (data.code == 200) {
                     this.menu = data.data.menu;
@@ -126,7 +126,7 @@ export default {
         },
         updateWxMenu() {
             this.$http({
-                url: this.$http.adornUrl('/manage/wxMenu/updateMenu?appid=' + Vue.cookie.get("appid")),
+                url: this.$http.adornUrl('/manage/wxMenu/updateMenu'),
                 data: this.menu,
                 method: 'post'
             }).then(({data}) => {
