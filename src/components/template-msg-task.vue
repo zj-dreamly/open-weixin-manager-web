@@ -23,14 +23,14 @@
             </el-form-item>
         </el-form>
         <div class="text-bold">本消息将发送给：</div>
-        <div class="user-list"  v-loading="wxUsersLoading">
+        <div class="user-list" v-loading="wxUsersLoading">
             <div class="user-card" v-for="item in wxUserList" :key="item.openid">
                 <el-avatar :src="item.headimgurl"></el-avatar>
-                <div class="nickname">{{item.nickname}}</div>
+                <div class="nickname">{{ item.nickname }}</div>
             </div>
             <div class="text-bold">
                 <span v-show="totalCount>10">...</span>
-                等共<span class="text-success">{{totalCount}}</span>个用户
+                等共<span class="text-success">{{ totalCount }}</span>个用户
             </div>
         </div>
         <div class="margin-top text-bold">消息预览：</div>
@@ -38,84 +38,85 @@
             <el-input type="textarea" disabled autosize v-model="msgReview" placeholder="模版"></el-input>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="send" type="success" :disabled="totalCount<=0 || sending">{{sending?'发送中...':'发送'}}</el-button>
+            <el-button @click="send" type="success" :disabled="totalCount<=0 || sending">{{ sending ? '发送中...' : '发送' }}</el-button>
             <el-button @click="visible=false">关闭</el-button>
         </span>
     </el-dialog>
 </template>
 <script>
-import { mapState } from 'vuex'
+import {mapState} from 'vuex'
+
 export default {
-    name:'template-msg-task',
-    props:{
-        wxUserTagName:{
-            type:String,
-            required:false
+    name: 'template-msg-task',
+    props: {
+        wxUserTagName: {
+            type: String,
+            required: false
         }
     },
-    data(){
-        return{
-            visible:false,
-            wxUsersLoading:false,
-            sending:false,
-            msgTemplate:{},
+    data() {
+        return {
+            visible: false,
+            wxUsersLoading: false,
+            sending: false,
+            msgTemplate: {},
             dataForm: {
-                page:1,
+                page: 1,
                 sidx: 'subscribe_time',
                 order: 'desc',
-                tagid:'',
+                tagid: '',
                 nickname: '',
-                city:'',
-                province:'',
-                remark:'',
-                qrScene:''
+                city: '',
+                province: '',
+                remark: '',
+                qrScene: ''
             },
-            wxUserList:[],
-            totalCount:0
+            wxUserList: [],
+            totalCount: 0
         }
     },
     computed: mapState({
-        wxUserTags:state=>state.wxUserTags.tags,
-        msgReview(){
-            if(!this.msgTemplate.data) return ""
+        wxUserTags: state => state.wxUserTags.tags,
+        msgReview() {
+            if (!this.msgTemplate.data) return ""
             let content = this.msgTemplate.content
-            this.msgTemplate.data.forEach(item=>{
-                content = content.replace("{{"+item.name+".DATA}}",item.value)
+            this.msgTemplate.data.forEach(item => {
+                content = content.replace("{{" + item.name + ".DATA}}", item.value)
             })
             return content
         }
     }),
     mounted() {
-        this.getWxUserTags().then((taglist)=>{
-            if(this.wxUserTagName){
-                let tagItem = taglist.find(tag=>tag.name==this.wxUserTagName)
+        this.getWxUserTags().then((taglist) => {
+            if (this.wxUserTagName) {
+                let tagItem = taglist.find(tag => tag.name == this.wxUserTagName)
                 console.log(tagItem)
-                if(tagItem) {
-                    this.dataForm.tagid=tagItem.id+''
+                if (tagItem) {
+                    this.dataForm.tagid = tagItem.id + ''
                 }
             }
             this.getWxUsers()
         });
     },
-    methods:{
-        init(msgTemplate){
-            if(!msgTemplate || !msgTemplate.templateId){
+    methods: {
+        init(msgTemplate) {
+            if (!msgTemplate || !msgTemplate.templateId) {
                 this.$message.error('消息模板无效')
                 return
             }
-            if(!msgTemplate.data || !(msgTemplate.data instanceof Array)){
+            if (!msgTemplate.data || !(msgTemplate.data instanceof Array)) {
                 this.$message.error('请现配置此模板填充数据')
                 return
             }
-            this.msgTemplate=msgTemplate
-            this.visible=true;
+            this.msgTemplate = msgTemplate
+            this.visible = true;
         },
         getWxUserTags() {
-            return new Promise((resolve,reject)=>{
+            return new Promise((resolve, reject) => {
                 this.$http({
                     url: this.$http.adornUrl('/manage/wxUserTags/list'),
                     method: 'get',
-                }).then(({ data }) => {
+                }).then(({data}) => {
                     if (data && data.code === 200) {
                         this.$store.commit('wxUserTags/updateTags', data.list)
                         resolve(data.list)
@@ -123,7 +124,7 @@ export default {
                         this.$message.error(data.msg)
                         reject(data.msg)
                     }
-                }).catch(err=>reject(err))
+                }).catch(err => reject(err))
             })
         },
         getWxUsers() {
@@ -132,7 +133,7 @@ export default {
                 url: this.$http.adornUrl('/manage/wxUser/list'),
                 method: 'get',
                 params: this.$http.adornParams(this.dataForm)
-            }).then(({ data }) => {
+            }).then(({data}) => {
                 if (data && data.code === 200) {
                     this.wxUserList = data.page.list
                     this.totalCount = data.page.totalCount
@@ -142,24 +143,24 @@ export default {
                 this.wxUsersLoading = false
             })
         },
-        send(){
-            if(this.sending)return
-            this.sending=true
+        send() {
+            if (this.sending) return
+            this.sending = true
             this.$http({
                 url: this.$http.adornUrl('/manage/msgTemplate/sendMsgBatch'),
                 method: 'post',
-                data:this.$http.adornData({
-                    wxUserFilterParams : this.dataForm,
-                    templateId : this.msgTemplate.templateId,
-                    url : this.msgTemplate.url,
-                    miniprogram : this.msgTemplate.miniprogram,
-                    data : this.msgTemplate.data,
+                data: this.$http.adornData({
+                    wxUserFilterParams: this.dataForm,
+                    templateId: this.msgTemplate.templateId,
+                    url: this.msgTemplate.url,
+                    miniprogram: this.msgTemplate.miniprogram,
+                    data: this.msgTemplate.data,
                 })
-            }).then(({ data }) => {
+            }).then(({data}) => {
                 this.sending = false
                 if (data && data.code === 200) {
                     this.$message.success("消息将在后台发送")
-                    this.visible=false
+                    this.visible = false
                 } else {
                     this.$message.error(data.msg)
                 }
@@ -169,21 +170,23 @@ export default {
 }
 </script>
 <style scoped>
-.user-list{
+.user-list {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 }
-.user-card{
+
+.user-card {
     overflow: hidden;
     max-width: 60px;
     margin: 5px;
     text-align: center;
 }
-.nickname{
+
+.nickname {
     color: #999999;
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 </style>

@@ -21,9 +21,10 @@ const http = axios.create({
 http.interceptors.request.use(config => {
     // 请求头带上token
     config.headers['token'] = Vue.cookie.get('token')
-    if (Vue.cookie.get('appid')){
-        config.params={
-            "appid": Vue.cookie.get('appid')
+    if (Vue.cookie.get('appid')) {
+        config.params = {
+            "appid": Vue.cookie.get('appid'),
+            ...config.params
         }
     }
     return config
@@ -60,7 +61,7 @@ http.adornUrl = (actionName) => {
  */
 http.adornParams = (params = {}, openDefultParams = true) => {
     var defaults = {
-        't': new Date().getTime()
+        't': new Date().getTime(),
     }
     return openDefultParams ? merge(defaults, params) : params
 }
@@ -75,7 +76,7 @@ http.adornParams = (params = {}, openDefultParams = true) => {
  */
 http.adornData = (data = {}, openDefultdata = true, contentType = 'json') => {
     var defaults = {
-        't': new Date().getTime()
+        't': new Date().getTime(),
     }
     data = openDefultdata ? merge(defaults, data) : data
     return contentType === 'json' ? JSON.stringify(data) : qs.stringify(data)
