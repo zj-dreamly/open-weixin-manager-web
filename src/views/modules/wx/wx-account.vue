@@ -21,7 +21,7 @@
             <el-table-column prop="type" header-align="center" align="center" label="类型" :formatter="accountTypeFormat">
             </el-table-column>
             <el-table-column prop="verified" header-align="center" align="center" label="是否认证">
-                <span slot-scope="scope">{{scope.row.verified?"是":"否"}}</span>
+                <span slot-scope="scope">{{ scope.row.verified ? "是" : "否" }}</span>
             </el-table-column>
             <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
                 <template slot-scope="scope">
@@ -40,7 +40,8 @@
 <script>
 import AddOrUpdate from './account/wx-account-add-or-update'
 import AccountAccess from './account/wx-account-access-info'
-import { mapState } from 'vuex'
+import {mapState} from 'vuex'
+
 export default {
     data() {
         return {
@@ -51,14 +52,14 @@ export default {
             dataListLoading: false,
             dataListSelections: [],
             addOrUpdateVisible: false,
-            accountAccessVisible:false
+            accountAccessVisible: false
         }
     },
     components: {
-        AddOrUpdate,AccountAccess
+        AddOrUpdate, AccountAccess
     },
     computed: mapState({
-        ACCOUNT_TYPES: state=>state.wxAccount.ACCOUNT_TYPES
+        ACCOUNT_TYPES: state => state.wxAccount.ACCOUNT_TYPES
     }),
     activated() {
         this.getDataList()
@@ -73,7 +74,7 @@ export default {
                 params: this.$http.adornParams({
                     'key': this.dataForm.key
                 })
-            }).then(({ data }) => {
+            }).then(({data}) => {
                 if (data && data.code === 200) {
                     this.dataList = data.list
                     this.$store.commit('wxAccount/updateAccountList', data.list)
@@ -94,10 +95,11 @@ export default {
                 this.$refs.addOrUpdate.init(item)
             })
         },
-        addOrUpdateHandleByOpen(item){
-            window.location.href="http://z5os29qr.xiaomy.net/authorize/show";
+
+        addOrUpdateHandleByOpen(item) {
+            window.location.href = "http://z5os29qr.xiaomy.net/authorize/show";
         },
-        accessInfo(item){
+        accessInfo(item) {
             this.accountAccessVisible = true
             this.$nextTick(() => {
                 this.$refs.accountAccessDialog.init(item)
@@ -117,7 +119,7 @@ export default {
                     url: this.$http.adornUrl('/manage/wxAccount/delete'),
                     method: 'post',
                     data: this.$http.adornData(ids, false)
-                }).then(({ data }) => {
+                }).then(({data}) => {
                     if (data && data.code === 200) {
                         this.$message({
                             message: '操作成功',

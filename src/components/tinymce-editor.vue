@@ -28,7 +28,7 @@ export default {
                 toolbar: "undo redo searchreplace |  formatselect pagebreak | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists link anchor image media table | removeformat code preview", //工具栏展示项
                 toolbar_drawer: false,
                 image_advtab: true,
-                object_resizing: false,
+                object_resizing: true,
                 paste_data_images: true,
                 content_css: "./tinymce/article.css",
                 images_upload_handler: (blobInfo, success, failure) => {
@@ -83,8 +83,8 @@ export default {
                     this.uploading = false;
                 }).catch(err=>reject(err))
             });
-            
-            
+
+
         }
     },
     watch: {
